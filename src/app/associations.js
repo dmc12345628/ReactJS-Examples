@@ -1,21 +1,36 @@
 import React from 'react'
 
-const url = 'https://opendata.larochelle.fr/webservice/?service=getData&key=t0oZndFrlBCPPkj9&db=association&table=assoc_entite&limit=5&format=json'
+const URL = 'https://opendata.larochelle.fr/webservice/?service=getData&key=t0oZndFrlBCPPkj9&db=association&table=assoc_entite&limit=5&format=json'
 
 export default class ButtonState extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            associations: []
+            associations: [],
+            offset: 0,
+            selectedRow:
         }
+
+        this.loadData(0)
     }
 
-    onClick = () => {
+    prior = () => {
+        this.loadData(-5)
+    }
+
+    next = () => {
+        this.loadData(5)
+    }
+
+    loadData(offset) {
+        let url = URL
+        this.state.offset += offset
+        url += "&offset=" + this.state.offset;
+
         fetch(url).then((res) => {
             return res.json()
         }).then((json) => {
-            console.log(json)
             this.setState({
                 associations: json.opendata.answer.data
             })
@@ -33,9 +48,13 @@ export default class ButtonState extends React.Component {
         })
 
         return (<div>
-            <button id="1" onClick={() => {
-                this.onClick()
-            }}>See associations
+            <button id="prior" onClick={() => {
+                this.prior()
+            }} disabled={this.state.offset == 0}>Prior
+            </button>
+            <button id="next" onClick={() => {
+                this.next()
+            }}>Next
             </button>
 
             <table>
@@ -48,4 +67,9 @@ export default class ButtonState extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-             
+                {trs}
+                </tbody>
+            </table>
+        </div>)
+    }
+}
