@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {onItemSelected} from "./reducers";
+import {changeOffset, onItemSelected, setOffset} from "./reducers";
 
 const URL = 'https://opendata.larochelle.fr/webservice/?service=getData&key=t0oZndFrlBCPPkj9&db=association&table=assoc_entite&limit=5&format=json'
 
@@ -69,7 +69,7 @@ class Associations extends React.Component {
         return (<div>
             <button id="prior" onClick={() => {
                 this.onFirst()
-            }} disabled={this.state.offset == 0}>Prior
+            }} disabled={this.state.offset == 0}>Start
             </button>
             <button id="prior" onClick={() => {
                 this.onPrior()

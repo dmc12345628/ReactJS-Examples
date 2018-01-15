@@ -1,5 +1,4 @@
 import Immutable from 'seamless-immutable'
-import associations from "./associations";
 
 const ON_ITEM_SELECTED = 'app/ON-ITEM-SELECTED'
 const SET_OFFSET = 'app/SET_OFFSET'
