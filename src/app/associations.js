@@ -1,16 +1,12 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {onItemSelected} from "./reducers";
 
 const URL = 'https://opendata.larochelle.fr/webservice/?service=getData&key=t0oZndFrlBCPPkj9&db=association&table=assoc_entite&limit=5&format=json'
 
-export default class ButtonState extends React.Component {
+class Associations extends React.Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            associations: [],
-            offset: 0,
-            selectedRow:
-        }
 
         this.loadData(0)
     }
@@ -37,9 +33,18 @@ export default class ButtonState extends React.Component {
         })
     }
 
+    onItemSelected(row) {
+        let action = onItemSelected(row.as_id)
+        this.props.dispatch(action)
+    }
+
     render() {
         let trs = this.state.associations.map((a) => {
-            return <tr key={a.as_id}>
+            return <tr key={a.as_id}
+                       onClick={() => {
+                           this.onItemSelected(a)
+                       }}
+                       className={(this.props.selectedRow === a.as_id) ? 'selected' : ''}>
                 <td>{a.as_libelle}</td>
                 <td>{a.as_adresse}</td>
                 <td>{a.as_code_postal}</td>
@@ -73,3 +78,14 @@ export default class ButtonState extends React.Component {
         </div>)
     }
 }
+
+function mapStateToProps(storeState, props) {
+    return {
+        selectedRow: storeState.associationKey,
+
+    }
+}
+
+export default connect(
+    mapStateToProps
+)(Associations)
