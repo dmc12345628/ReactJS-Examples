@@ -11,8 +11,10 @@ class Associations extends React.Component {
         this.state = {
             associations: []
         }
+    }
 
-        this.loadData(0)
+    componentWillMount() {
+        this.props.dispatch(setOffset(0))
     }
 
     componentWillReceiveProps(nextProps) {
@@ -69,11 +71,11 @@ class Associations extends React.Component {
         return (<div>
             <button id="prior" onClick={() => {
                 this.onFirst()
-            }} disabled={this.state.offset == 0}>Start
+            }} disabled={this.props.offset == 0}>Start
             </button>
             <button id="prior" onClick={() => {
                 this.onPrior()
-            }} disabled={this.state.offset == 0}>Prior
+            }} disabled={this.props.offset == 0}>Prior
             </button>
             <button id="next" onClick={() => {
                 this.onNext()

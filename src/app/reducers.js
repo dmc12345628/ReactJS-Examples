@@ -4,7 +4,7 @@ const ON_ITEM_SELECTED = 'app/ON-ITEM-SELECTED'
 const SET_OFFSET = 'app/SET_OFFSET'
 const CHANGE_OFFSET = 'app/CHANGE_OFFSET'
 const initialState = {
-    offset: 0,
+    offset: null,
     associationId: 0,
 }
 
