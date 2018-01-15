@@ -8,21 +8,35 @@ class Associations extends React.Component {
     constructor(props) {
         super(props)
 
+        this.state = {
+            associations: []
+        }
+
         this.loadData(0)
     }
 
-    prior = () => {
-        this.loadData(-5)
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.offset !== this.props.offset) {
+            this.loadData(nextProps.offset)
+        }
     }
 
-    next = () => {
-        this.loadData(5)
+    onFirst = () => {
+        this.props.dispatch(setOffset(0))
+    }
+
+    onPrior = () => {
+        this.props.dispatch(changeOffset(-5))
+    }
+
+    onNext = () => {
+        this.props.dispatch(changeOffset(5))
     }
 
     loadData(offset) {
         let url = URL
-        this.state.offset += offset
-        url += "&offset=" + this.state.offset;
+        if (offset)
+            url += "&offset=" + offset;
 
         fetch(url).then((res) => {
             return res.json()
@@ -54,11 +68,15 @@ class Associations extends React.Component {
 
         return (<div>
             <button id="prior" onClick={() => {
-                this.prior()
+                this.onFirst()
+            }} disabled={this.state.offset == 0}>Prior
+            </button>
+            <button id="prior" onClick={() => {
+                this.onPrior()
             }} disabled={this.state.offset == 0}>Prior
             </button>
             <button id="next" onClick={() => {
-                this.next()
+                this.onNext()
             }}>Next
             </button>
 
@@ -81,8 +99,8 @@ class Associations extends React.Component {
 
 function mapStateToProps(storeState, props) {
     return {
-        selectedRow: storeState.associationKey,
-
+        offset: storeState.offset,
+        selectedRow: storeState.associationId,
     }
 }
 

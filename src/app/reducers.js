@@ -1,33 +1,31 @@
 import Immutable from 'seamless-immutable'
+import associations from "./associations";
 
-const URL = 'https://opendata.larochelle.fr/webservice/?service=getData&key=t0oZndFrlBCPPkj9&db=association&table=assoc_entite&limit=5&format=json'
 const ON_ITEM_SELECTED = 'app/ON-ITEM-SELECTED'
-const LOAD_DATA = 'app/LOAD_DATA'
+const SET_OFFSET = 'app/SET_OFFSET'
+const CHANGE_OFFSET = 'app/CHANGE_OFFSET'
 const initialState = {
-    associations: [],
     offset: 0,
     associationId: 0,
 }
 
 export function reducer(previousState = Immutable(initialState), action) {
     switch (action.type) {
-        case ON_ITEM_SELECTED:
-            let newState = previousState.set('associationKey',
+        case ON_ITEM_SELECTED: {
+            let newState = previousState.set('associationId',
                 action.payload.associationId)
             return newState
-        case LOAD_DATA:
-            let url = URL
-            previousState.get('') += offset
-            url += "&offset=" + this.state.offset;
-
-            fetch(url).then((res) => {
-                return res.json()
-            }).then((json) => {
-                this.setState({
-                    associations: json.opendata.answer.data
-                })
-            })
-            let newState = previousState.set('')
+        }
+        case SET_OFFSET: {
+            let newState = previousState.set('offset',
+                action.payload.offset)
+            return newState
+        }
+        case CHANGE_OFFSET: {
+            let newState = previousState.set('offset',
+                previousState.offset + action.payload.delta)
+            return newState
+        }
     }
 
     return previousState
@@ -42,12 +40,20 @@ export function onItemSelected(associationId) {
     }
 }
 
-export function loadData(offset) {
+export function setOffset(offset) {
     return {
-        type: LOAD_DATA,
+        type: SET_OFFSET,
         payload: {
-            associations: [],
-            offset: offset,
+            offset: offset
+        }
+    }
+}
+
+export function changeOffset(delta) {
+    return {
+        type: CHANGE_OFFSET,
+        payload: {
+            delta: delta
         }
     }
 }
